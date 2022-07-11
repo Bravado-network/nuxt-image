@@ -170,6 +170,7 @@ function getSizes(ctx, input, opts) {
         size,
         screenMaxWidth,
         media: `(max-width: ${screenMaxWidth}px)`,
+        dpr,
         src: ctx.$img(input, { ...opts.modifiers, dpr, width: _cWidth, height: _cHeight }, opts)
       });
     });
