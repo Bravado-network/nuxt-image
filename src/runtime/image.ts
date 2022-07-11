@@ -163,6 +163,8 @@ function getSizes (ctx: ImageCTX, input: string, opts: ImageSizesOptions) {
   const height = parseSize(opts.modifiers?.height)
   const hwRatio = (width && height) ? height / width : 0
   const variants = []
+  // FIXME: move to the module settings
+  const density = '1 2'.split(' ')
 
   const sizes: Record<string, string> = {}
 
@@ -171,7 +173,8 @@ function getSizes (ctx: ImageCTX, input: string, opts: ImageSizesOptions) {
     for (const entry of opts.sizes.split(/[\s,]+/).filter(e => e)) {
       const s = entry.split(':')
       if (s.length !== 2) { continue }
-      sizes[s[0].trim()] = s[1].trim()
+      const [breakpoint, size] = s
+      sizes[breakpoint.trim()] = size.trim()
     }
   } else {
     Object.assign(sizes, opts.sizes)
@@ -195,12 +198,20 @@ function getSizes (ctx: ImageCTX, input: string, opts: ImageSizesOptions) {
       _cWidth = Math.round((_cWidth / 100) * screenMaxWidth)
     }
     const _cHeight = hwRatio ? Math.round(_cWidth * hwRatio) : height
-    variants.push({
-      width: _cWidth,
-      size,
-      screenMaxWidth,
-      media: `(max-width: ${screenMaxWidth}px)`,
-      src: ctx.$img!(input, { ...opts.modifiers, width: _cWidth, height: _cHeight }, opts)
+    density.forEach((x) => {
+      const dpr = `${x}.0`
+
+      variants.push({
+        width: _cWidth,
+        size,
+        screenMaxWidth,
+        media: `(max-width: ${screenMaxWidth}px)`,
+        src: ctx.$img!(
+          input,
+          { ...opts.modifiers, dpr, width: _cWidth, height: _cHeight },
+          opts
+        ),
+      });
     })
   }
 
@@ -212,8 +223,11 @@ function getSizes (ctx: ImageCTX, input: string, opts: ImageSizesOptions) {
   }
 
   return {
-    sizes: variants.map(v => `${v.media ? v.media + ' ' : ''}${v.size}`).join(', '),
-    srcset: variants.map(v => `${v.src} ${v.width}w`).join(', '),
-    src: defaultVar?.src
-  }
+    sizes: variants
+      .map((v) => `${v.media ? v.media + " " : ""}${v.size}`)
+      .filter((item, index, array) => array.indexOf(item) === index)
+      .join(", "),
+    srcset: variants.map((v) => `${v.src} ${v.width}w ${v.dpr}`).join(", "),
+    src: defaultVar?.src,
+  };
 }

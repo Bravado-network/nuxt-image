@@ -14,13 +14,20 @@ export const imageMixin = defineMixin({
     quality: { type: [Number, String], default: undefined },
     background: { type: String, default: undefined },
     fit: { type: String, default: undefined },
-    modifiers: { type: Object as () => Record<string, any>, default: undefined },
+    modifiers: {
+      type: Object as () => Record<string, any>,
+      default: undefined,
+    },
 
     // options
     preset: { type: String, default: undefined },
     provider: { type: String, default: undefined },
+    responsive: { type: Boolean, default: true },
 
-    sizes: { type: [Object, String] as unknown as () => string | Record<string, any>, default: undefined },
+    sizes: {
+      type: [Object, String] as unknown as () => string | Record<string, any>,
+      default: undefined,
+    },
     preload: { type: Boolean, default: undefined },
 
     // <img> attributes
@@ -31,23 +38,36 @@ export const imageMixin = defineMixin({
     usemap: { type: String, default: undefined },
     longdesc: { type: String, default: undefined },
     ismap: { type: Boolean, default: undefined },
-    crossorigin: { type: [Boolean, String] as unknown as () => boolean | '' | 'anonymous' | 'use-credentials', default: undefined, validator: val => ['anonymous', 'use-credentials', '', true, false].includes(val) },
+    crossorigin: {
+      type: [Boolean, String] as unknown as () =>
+        | boolean
+        | ""
+        | "anonymous"
+        | "use-credentials",
+      default: undefined,
+      validator: (val) =>
+        ["anonymous", "use-credentials", "", true, false].includes(val),
+    },
     loading: { type: String, default: undefined },
-    decoding: { type: String as () => 'async' | 'auto' | 'sync', default: undefined, validator: val => ['async', 'auto', 'sync'].includes(val) }
+    decoding: {
+      type: String as () => "async" | "auto" | "sync",
+      default: undefined,
+      validator: (val) => ["async", "auto", "sync"].includes(val),
+    },
   },
   computed: {
-    nImgAttrs (): {
-      width?: number
-      height?: number
-      alt?: string
-      referrerpolicy?: string
-      usemap?: string
-      longdesc?: string
-      ismap?: boolean
-      crossorigin?: '' | 'anonymous' | 'use-credentials'
-      loading?: string
-      decoding?: 'async' | 'auto' | 'sync'
-      } {
+    nImgAttrs(): {
+      width?: number;
+      height?: number;
+      alt?: string;
+      referrerpolicy?: string;
+      usemap?: string;
+      longdesc?: string;
+      ismap?: boolean;
+      crossorigin?: "" | "anonymous" | "use-credentials";
+      loading?: string;
+      decoding?: "async" | "auto" | "sync";
+    } {
       return {
         width: parseSize(this.width),
         height: parseSize(this.height),
@@ -56,12 +76,22 @@ export const imageMixin = defineMixin({
         usemap: this.usemap,
         longdesc: this.longdesc,
         ismap: this.ismap,
-        crossorigin: this.crossorigin === true ? 'anonymous' : this.crossorigin || undefined,
+        crossorigin:
+          this.crossorigin === true
+            ? "anonymous"
+            : this.crossorigin || undefined,
         loading: this.loading,
-        decoding: this.decoding
-      }
+        decoding: this.decoding,
+      };
     },
-    nModifiers (): { width?: number, height?: number, format?: string, quality?: string | number, background?: string, fit?: string } & Record<string, any> {
+    nModifiers(): {
+      width?: number;
+      height?: number;
+      format?: string;
+      quality?: string | number;
+      background?: string;
+      fit?: string;
+    } & Record<string, any> {
       return {
         ...this.modifiers,
         width: parseSize(this.width),
@@ -69,14 +99,14 @@ export const imageMixin = defineMixin({
         format: this.format,
         quality: this.quality,
         background: this.background,
-        fit: this.fit
-      }
+        fit: this.fit,
+      };
     },
-    nOptions (): { provider?: string, preset?: string } {
+    nOptions(): { provider?: string; preset?: string } {
       return {
         provider: this.provider,
-        preset: this.preset
-      }
-    }
-  }
-})
+        preset: this.preset,
+      };
+    },
+  },
+});

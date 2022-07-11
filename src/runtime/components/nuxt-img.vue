@@ -51,7 +51,7 @@ export default defineComponent({
     },
     /* eslint-disable no-undef */
     nSizes (): ImageSizes {
-      return this.$img.getSizes(this.src, {
+      const nSizes = this.$img.getSizes(this.src, {
         ...this.nOptions,
         sizes: this.sizes,
         modifiers: {
@@ -59,7 +59,9 @@ export default defineComponent({
           width: parseSize(this.width),
           height: parseSize(this.height)
         }
-      })
+      });
+      console.log('sizes', nSizes)
+      return nSizes
     },
     nSrc (): string {
       return this.nPlaceholder ? this.nPlaceholder : this.nMainSrc
