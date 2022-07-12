@@ -144,7 +144,7 @@ function getSizes(ctx, input, opts) {
   } else {
     Object.assign(sizes, opts.sizes);
   }
-  const density = opts.density || ctx.options.density;
+  const density = opts.density || ctx.options.density || "1 2";
   if (!sizes.length && !opts.responsive && density) {
     const densities = density.split(" ");
     densities.forEach((x) => {

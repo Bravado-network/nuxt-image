@@ -178,8 +178,10 @@ function getSizes (ctx: ImageCTX, input: string, opts: ImageSizesOptions) {
     Object.assign(sizes, opts.sizes)
   }
 
+  // FIXME: don't understand why plugin config doesnt provide density
   // If image is a just a static image - set 2x
-  const density = opts.density || ctx.options.density
+  const density = opts.density || ctx.options.density || '1 2'
+
   if (!sizes.length && !opts.responsive && density) {
     const densities = density.split(' ')
 
