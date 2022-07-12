@@ -33,7 +33,8 @@ const imageModule: Module<ModuleOptions> = async function imageModule (moduleOpt
     internalUrl: '',
     providers: {},
     static: {},
-    alias: {}
+    alias: {},
+    density: ''
   }
 
   const options: ModuleOptions = defu(moduleOptions, nuxt.options.image, defaults)
@@ -49,13 +50,15 @@ const imageModule: Module<ModuleOptions> = async function imageModule (moduleOpt
 
   options.provider = detectProvider(options.provider, nuxt.options.target === 'static')
   options[options.provider] = options[options.provider] || {}
+  options.density = moduleOptions.density || defaults.density
 
   const imageOptions: Omit<CreateImageOptions, 'providers'> = pick(options, [
     'screens',
     'presets',
     'provider',
     'domains',
-    'alias'
+    'alias',
+    'density'
   ])
 
   const providers = resolveProviders(nuxt, options)

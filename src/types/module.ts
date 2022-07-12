@@ -61,17 +61,18 @@ export interface ImageProviders {
 
 // TODO: use types from CreateImageOptions
 export interface ModuleOptions extends ImageProviders {
-  staticFilename: string,
-  provider: CreateImageOptions['provider']
-  presets: { [name: string]: ImageOptions }
-  dir: string
-  domains: string[]
-  sharp: any
-  alias: Record<string, string>
-  screens: CreateImageOptions['screens'],
-  internalUrl: string
-  providers: { [name: string]: InputProvider | any } & ImageProviders
-  [key: string]: any
+  staticFilename: string;
+  provider: CreateImageOptions['provider'];
+  presets: { [name: string]: ImageOptions };
+  dir: string;
+  domains: string[];
+  sharp: any;
+  alias: Record<string, string>;
+  screens: CreateImageOptions['screens'];
+  internalUrl: string;
+  providers: { [name: string]: InputProvider | any } & ImageProviders;
+  density?: string;
+  [key: string]: any;
 }
 
 export interface ImageModuleProvider {

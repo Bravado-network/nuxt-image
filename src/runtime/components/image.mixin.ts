@@ -23,6 +23,7 @@ export const imageMixin = defineMixin({
     preset: { type: String, default: undefined },
     provider: { type: String, default: undefined },
     responsive: { type: Boolean, default: true },
+    density: { type: String, default: undefined },
 
     sizes: {
       type: [Object, String] as unknown as () => string | Record<string, any>,
@@ -102,10 +103,11 @@ export const imageMixin = defineMixin({
         fit: this.fit,
       };
     },
-    nOptions(): { provider?: string; preset?: string } {
+    nOptions(): { provider?: string; preset?: string, density?: string } {
       return {
         provider: this.provider,
         preset: this.preset,
+        density: this.density
       };
     },
   },

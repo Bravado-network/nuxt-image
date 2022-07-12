@@ -1,3 +1,13 @@
+Modified versions of original `Nuxt Image` v0
+
+- Add `density` support to config and component: With it NuxtImage will automatically generate src-set for screens with dps. Eg: `density: '1 2'` will generate `src-set` with 1x and 2x variants
+
+TODO:
+- Add `responsive` flag to automatically generate all src-set + densities values based on sizes
+- Build in npm register, not in a repo
+
+***
+
 [![@nuxt/image](./docs/public/cover.jpg "Nuxt Image")](./docs/public/cover.jpg)
 
 [![npm version][npm-version-src]][npm-version-href]

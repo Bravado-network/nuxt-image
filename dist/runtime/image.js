@@ -131,7 +131,6 @@ function getSizes(ctx, input, opts) {
   const height = parseSize(opts.modifiers?.height);
   const hwRatio = width && height ? height / width : 0;
   const variants = [];
-  const density = "1 2".split(" ");
   const sizes = {};
   if (typeof opts.sizes === "string") {
     for (const entry of opts.sizes.split(/[\s,]+/).filter((e) => e)) {
@@ -145,35 +144,44 @@ function getSizes(ctx, input, opts) {
   } else {
     Object.assign(sizes, opts.sizes);
   }
-  for (const key in sizes) {
-    const screenMaxWidth = ctx.options.screens && ctx.options.screens[key] || parseInt(key);
-    let size = String(sizes[key]);
-    const isFluid = size.endsWith("vw");
-    if (!isFluid && /^\d+$/.test(size)) {
-      size = size + "px";
-    }
-    if (!isFluid && !size.endsWith("px")) {
-      continue;
-    }
-    let _cWidth = parseInt(size);
-    if (!screenMaxWidth || !_cWidth) {
-      continue;
-    }
-    if (isFluid) {
-      _cWidth = Math.round(_cWidth / 100 * screenMaxWidth);
-    }
-    const _cHeight = hwRatio ? Math.round(_cWidth * hwRatio) : height;
-    density.forEach((x) => {
-      const dpr = `${x}.0`;
+  const density = opts.density || ctx.options.density;
+  if (!sizes.length && !opts.responsive && density) {
+    const densities = density.split(" ");
+    densities.forEach((x) => {
+      const dprImaginary = x.includes(".") ? x : `${x}.0`;
+      const dprSrcSet = `${x}x`;
+      variants.push({
+        dpr: dprSrcSet,
+        src: ctx.$img(input, { ...opts.modifiers, dpr: dprImaginary, width, height }, opts)
+      });
+    });
+  } else {
+    for (const key in sizes) {
+      const screenMaxWidth = ctx.options.screens && ctx.options.screens[key] || parseInt(key);
+      let size = String(sizes[key]);
+      const isFluid = size.endsWith("vw");
+      if (!isFluid && /^\d+$/.test(size)) {
+        size = size + "px";
+      }
+      if (!isFluid && !size.endsWith("px")) {
+        continue;
+      }
+      let _cWidth = parseInt(size);
+      if (!screenMaxWidth || !_cWidth) {
+        continue;
+      }
+      if (isFluid) {
+        _cWidth = Math.round(_cWidth / 100 * screenMaxWidth);
+      }
+      const _cHeight = hwRatio ? Math.round(_cWidth * hwRatio) : height;
       variants.push({
         width: _cWidth,
         size,
         screenMaxWidth,
         media: `(max-width: ${screenMaxWidth}px)`,
-        dpr,
         src: ctx.$img(input, { ...opts.modifiers, dpr, width: _cWidth, height: _cHeight }, opts)
       });
-    });
+    }
   }
   variants.sort((v1, v2) => v1.screenMaxWidth - v2.screenMaxWidth);
   const defaultVar = variants[variants.length - 1];
@@ -181,8 +189,8 @@ function getSizes(ctx, input, opts) {
     defaultVar.media = "";
   }
   return {
-    sizes: variants.map((v) => `${v.media ? v.media + " " : ""}${v.size}`).filter((item, index, array) => array.indexOf(item) === index).join(", "),
-    srcset: variants.map((v) => `${v.src} ${v.width}w ${v.dpr}`).join(", "),
+    sizes: variants.filter((v) => v.media && v.size).map((v) => `${v.media ? v.media + " " : ""}${v.size}`).filter((item, index, array) => array.indexOf(item) === index).join(", "),
+    srcset: variants.map((v) => `${v.src} ${v.width ? `${v.width}w` : ""} ${v.dpr}`).join(", "),
     src: defaultVar?.src
   };
 }

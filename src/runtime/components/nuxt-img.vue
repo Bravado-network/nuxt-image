@@ -39,11 +39,11 @@ export default defineComponent({
   computed: {
     nAttrs (): NAttrs {
       const attrs: NAttrs = this.nImgAttrs
-      if (this.sizes) {
-        const { sizes, srcset } = this.nSizes
-        attrs.sizes = sizes
-        attrs.srcset = srcset
-      }
+
+      const { sizes, srcset } = this.nSizes
+      if (sizes) { attrs.sizes = sizes }
+      if (srcset) { attrs.srcset = srcset }
+
       return attrs
     },
     nMainSrc (): string {
@@ -51,7 +51,7 @@ export default defineComponent({
     },
     /* eslint-disable no-undef */
     nSizes (): ImageSizes {
-      const nSizes = this.$img.getSizes(this.src, {
+      return this.$img.getSizes(this.src, {
         ...this.nOptions,
         sizes: this.sizes,
         modifiers: {
@@ -60,8 +60,6 @@ export default defineComponent({
           height: parseSize(this.height)
         }
       });
-      console.log('sizes', nSizes)
-      return nSizes
     },
     nSrc (): string {
       return this.nPlaceholder ? this.nPlaceholder : this.nMainSrc

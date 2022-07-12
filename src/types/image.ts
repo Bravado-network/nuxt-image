@@ -10,6 +10,7 @@ export interface ImageOptions {
   provider?: string,
   preset?: string,
   modifiers?: Partial<ImageModifiers>
+  density?: string
   [key: string]: any
 }
 
@@ -38,7 +39,8 @@ export interface CreateImageOptions {
   provider: string
   screens: Record<string, number>,
   alias: Record<string, string>,
-  domains: string[]
+  domains: string[],
+  density?: string,
 }
 
 export interface ImageInfo {

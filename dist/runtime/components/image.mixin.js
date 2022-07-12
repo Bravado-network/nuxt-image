@@ -14,6 +14,7 @@ export const imageMixin = defineMixin({
     preset: { type: String, default: void 0 },
     provider: { type: String, default: void 0 },
     responsive: { type: Boolean, default: true },
+    density: { type: String, default: void 0 },
     sizes: {
       type: [Object, String],
       default: void 0
@@ -67,7 +68,8 @@ export const imageMixin = defineMixin({
     nOptions() {
       return {
         provider: this.provider,
-        preset: this.preset
+        preset: this.preset,
+        density: this.density
       };
     }
   }

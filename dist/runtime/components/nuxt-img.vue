@@ -29,9 +29,11 @@ export default defineComponent({
   computed: {
     nAttrs() {
       const attrs = this.nImgAttrs;
-      if (this.sizes) {
-        const { sizes, srcset } = this.nSizes;
+      const { sizes, srcset } = this.nSizes;
+      if (sizes) {
         attrs.sizes = sizes;
+      }
+      if (srcset) {
         attrs.srcset = srcset;
       }
       return attrs;
@@ -40,7 +42,7 @@ export default defineComponent({
       return this.sizes ? this.nSizes.src : this.$img(this.src, this.nModifiers, this.nOptions);
     },
     nSizes() {
-      const nSizes = this.$img.getSizes(this.src, {
+      return this.$img.getSizes(this.src, {
         ...this.nOptions,
         sizes: this.sizes,
         modifiers: {
@@ -49,8 +51,6 @@ export default defineComponent({
           height: parseSize(this.height)
         }
       });
-      console.log("sizes", nSizes);
-      return nSizes;
     },
     nSrc() {
       return this.nPlaceholder ? this.nPlaceholder : this.nMainSrc;

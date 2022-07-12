@@ -12,6 +12,7 @@ interface ImageOptions {
     provider?: string;
     preset?: string;
     modifiers?: Partial<ImageModifiers>;
+    density?: string;
     [key: string]: any;
 }
 interface ImageSizesOptions extends ImageOptions {
@@ -38,6 +39,7 @@ interface CreateImageOptions {
     screens: Record<string, number>;
     alias: Record<string, string>;
     domains: string[];
+    density?: string;
 }
 interface ImageInfo {
     width: number;
@@ -167,6 +169,7 @@ interface ModuleOptions extends ImageProviders {
     providers: {
         [name: string]: InputProvider | any;
     } & ImageProviders;
+    density?: string;
     [key: string]: any;
 }
 interface ImageModuleProvider {

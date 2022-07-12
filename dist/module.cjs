@@ -237,7 +237,8 @@ const imageModule = async function imageModule2(moduleOptions) {
     internalUrl: "",
     providers: {},
     static: {},
-    alias: {}
+    alias: {},
+    density: ""
   };
   const options = defu__default(moduleOptions, nuxt.options.image, defaults);
   options.domains = options.domains.map((d) => {
@@ -249,12 +250,14 @@ const imageModule = async function imageModule2(moduleOptions) {
   options.alias = Object.fromEntries(Object.entries(options.alias).map((e) => [ufo.withLeadingSlash(e[0]), e[1]]));
   options.provider = detectProvider(options.provider, nuxt.options.target === "static");
   options[options.provider] = options[options.provider] || {};
+  options.density = moduleOptions.density || defaults.density;
   const imageOptions = pick(options, [
     "screens",
     "presets",
     "provider",
     "domains",
-    "alias"
+    "alias",
+    "density"
   ]);
   const providers = resolveProviders(nuxt, options);
   for (const p of providers) {

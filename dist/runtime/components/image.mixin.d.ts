@@ -22,6 +22,7 @@ export declare const imageMixin: {
     nOptions: {
         provider?: string;
         preset?: string;
+        density?: string;
     };
 } & {
     src: string;
@@ -33,6 +34,7 @@ export declare const imageMixin: {
     preset: string;
     provider: string;
     responsive: boolean;
+    density: string;
     sizes: string | Record<string, any>;
     preload: boolean;
     width: string | number;
